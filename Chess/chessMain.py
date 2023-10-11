@@ -1,10 +1,16 @@
 """
 This is main driver file. It's responsibilities are handling user input and displaying current GameState.
+Game instructions: https://en.wikipedia.org/wiki/Rules_of_chess
+Author: Szymon Kuczyński
+Setup:
+    1. Get all required files from Git and put them in folder 'Chess'
+    2. In the console, navigate to 'Chess' folder
+    3. Launch the game by typing 'python chessMain.py'
 """
 
 import pygame as p
-from Chess import chessEngine
-from Chess import AiBot
+import chessEngine
+import AiBot
 
 p.init()
 WIDTH = HEIGHT = 512  # chessboard resolution
@@ -27,7 +33,7 @@ def load_pieces():
     p.transform size(SqSize, SqSize): loaded image is scaled to the desired resolution 
     '''
     for piece in pieces:
-        IMAGES[piece] = p.transform.scale(p.image.load("Chess/Pieces/" + piece + ".png"), (SqSIZE, SqSIZE))
+        IMAGES[piece] = p.transform.scale(p.image.load(piece + ".png"), (SqSIZE, SqSIZE))
 
 
 """
