@@ -3,9 +3,10 @@ This is main driver file. It's responsibilities are handling user input and disp
 Game instructions: https://en.wikipedia.org/wiki/Rules_of_chess
 Author: Szymon Kuczyński
 Setup:
-    1. Get all required files from Git and put them in folder 'Chess'
-    2. In the console, navigate to 'Chess' folder
-    3. Launch the game by typing 'python chessMain.py'
+    1. Install Python
+    2. Get all required files from Git and put them in folder 'Chess', preferably in Python directory
+    3. In the console, navigate to 'Chess' folder
+    4. Launch the game by typing 'python chessMain.py'
 """
 
 import pygame as p
