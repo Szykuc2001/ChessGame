@@ -1,11 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# ## Movie Recommendation System
-
-# In[1]:
-
-
+#Instructions
+'''
+1. Download required files
+2. Put credits and movies files in the project directory
+3. Change path for the files to their absolute path
+4. Change the movie titles in the appropriate lines
+5. Run the code
+'''
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,71 +15,55 @@ from sklearn.metrics.pairwise import linear_kernel
 from sklearn.metrics.pairwise import cosine_similarity
 from ast import literal_eval
 
-# In[2]:
 
-
-path = "./Users/Simon/PycharmProjects/ChessGame/Lab3"
+'''Reading CSV files into pandas DataFrames'''
 credits_df = pd.read_csv(r"C:\Users\Simon\PycharmProjects\ChessGame\Lab3\tmdb_5000_credits.csv")
 movies_df = pd.read_csv(r"C:\Users\Simon\PycharmProjects\ChessGame\Lab3\tmdb_5000_movies.csv")
 
-# In[3]:
-
 
 movies_df.head()
-
-# In[4]:
 
 
 credits_df.head()
 
-# In[5]:
-
-
+'''Renaming columns in the credits DataFrame'''
 credits_df.columns = ['id', 'tittle', 'cast', 'crew']
+'''Merging movies and credits DataFrames on 'id' column'''
 movies_df = movies_df.merge(credits_df, on="id")
-
-# In[6]:
 
 
 movies_df.head()
 
-# In[7]:
-
 
 # Demographic Filtering
+'''Calculating mean vote average and 90th percentile of vote count'''
 C = movies_df["vote_average"].mean()
 m = movies_df["vote_count"].quantile(0.9)
 
 print("C: ", C)
 print("m: ", m)
 
+'''Filtering movies based on the calculated threshold'''
 new_movies_df = movies_df.copy().loc[movies_df["vote_count"] >= m]
 print(new_movies_df.shape)
 
-
-# In[8]:
-
-
+'''Defining a weighted rating function'''
 def weighted_rating(x, C=C, m=m):
     v = x["vote_count"]
     R = x["vote_average"]
 
     return (v / (v + m) * R) + (m / (v + m) * C)
 
-
-# In[9]:
-
-
+'''Applying the weighted rating function to the filtered movies'''
 new_movies_df["score"] = new_movies_df.apply(weighted_rating, axis=1)
 new_movies_df = new_movies_df.sort_values('score', ascending=False)
 
+'''Displaying the top 10 movies based on demographic filtering'''
 new_movies_df[["title", "vote_count", "vote_average", "score"]].head(10)
 
 
-# In[10]:
-
-
 # Plot top 10 movies
+'''Plotting the top 10 movies based on popularity'''
 def plot():
     popularity = movies_df.sort_values("popularity", ascending=False)
     plt.figure(figsize=(12, 6))
@@ -92,35 +76,30 @@ def plot():
 
 plot()
 
-# In[11]:
-
 
 # Content based Filtering
+'''Printing the overview of the first 5 movies'''
 print(movies_df["overview"].head(5))
 
-# In[12]:
-
-
+'''Using TfidfVectorizer to convert movie overviews into a matrix of TF-IDF features'''
 tfidf = TfidfVectorizer(stop_words="english")
 movies_df["overview"] = movies_df["overview"].fillna("")
 
 tfidf_matrix = tfidf.fit_transform(movies_df["overview"])
 print(tfidf_matrix.shape)
 
-# In[13]:
-
 
 # Compute similarity
+'''Computing cosine similarity between movie overviews'''
 cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
 print(cosine_sim.shape)
 
+'''Creating a Series with movie titles as index and movie indices as values'''
 indices = pd.Series(movies_df.index, index=movies_df["title"]).drop_duplicates()
 print(indices.head())
 
 
-# In[14]:
-
-
+'''Defining a function to get movie recommendations based on cosine similarity'''
 def get_recommendations(title, cosine_sim=cosine_sim):
     """
     in this function,
@@ -140,9 +119,6 @@ def get_recommendations(title, cosine_sim=cosine_sim):
     movies_indices = [ind[0] for ind in sim_scores]
     movies = movies_df["title"].iloc[movies_indices]
     return movies
-
-
-# In[15]:
 
 
 print("################ Content Based Filtering - plot#############")
@@ -195,9 +171,7 @@ print()
 print("Recommendations for Raiders of the Lost Ark")
 print(get_recommendations("Raiders of the Lost Ark"))
 
-# In[16]:
-
-
+'''Processing metadata features (cast, crew, keywords, genres)'''
 features = ["cast", "crew", "keywords", "genres"]
 
 for feature in features:
@@ -205,20 +179,14 @@ for feature in features:
 
 movies_df[features].head(10)
 
-
-# In[17]:
-
-
+'''Extracting the director from the crew information'''
 def get_director(x):
     for i in x:
         if i["job"] == "Director":
             return i["name"]
     return np.nan
 
-
-# In[18]:
-
-
+'''Extracting lists of names for cast, keywords, and genres'''
 def get_list(x):
     if isinstance(x, list):
         names = [i["name"] for i in x]
@@ -230,25 +198,18 @@ def get_list(x):
 
     return []
 
-
-# In[19]:
-
-
+'''Applying the director and list extraction functions to relevant features'''
 movies_df["director"] = movies_df["crew"].apply(get_director)
 
 features = ["cast", "keywords", "genres"]
 for feature in features:
     movies_df[feature] = movies_df[feature].apply(get_list)
 
-# In[21]:
-
-
+'''Displaying the relevant metadata information for the first 10 movies'''
 movies_df[['title', 'cast', 'director', 'keywords', 'genres']].head()
 
 
-# In[22]:
-
-
+'''Cleaning data by converting strings to lowercase and removing spacesv'''
 def clean_data(x):
     if isinstance(x, list):
         return [str.lower(i.replace(" ", "")) for i in x]
@@ -259,17 +220,13 @@ def clean_data(x):
             return ""
 
 
-# In[23]:
-
-
+'''Applying data cleaning to metadata features'''
 features = ['cast', 'keywords', 'director', 'genres']
 for feature in features:
     movies_df[feature] = movies_df[feature].apply(clean_data)
 
 
-# In[24]:
-
-
+'''Creating a "soup" by combining relevant metadata features'''
 def create_soup(x):
     return ' '.join(x['keywords']) + ' ' + ' '.join(x['cast']) + ' ' + x['director'] + ' ' + ' '.join(x['genres'])
 
@@ -277,28 +234,65 @@ def create_soup(x):
 movies_df["soup"] = movies_df.apply(create_soup, axis=1)
 print(movies_df["soup"].head())
 
-# In[25]:
-
-
+'''Using CountVectorizer to convert the "soup" into a matrix of token counts'''
 count_vectorizer = CountVectorizer(stop_words="english")
 count_matrix = count_vectorizer.fit_transform(movies_df["soup"])
 
 print(count_matrix.shape)
-
+'''Computing cosine similarity between movies based on token counts'''
 cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
 print(cosine_sim2.shape)
 
+'''Resetting the DataFrame index and creating a new indices Series'''
 movies_df = movies_df.reset_index()
 indices = pd.Series(movies_df.index, index=movies_df['title'])
 
-# In[26]:
-
-
+'''Displaying content-based recommendations for specific movies using metadata'''
 print("################ Content Based System - metadata #############")
 print("Recommendations for The Dark Knight Rises")
 print(get_recommendations("The Dark Knight Rises", cosine_sim2))
 print()
 print("Recommendations for Avengers")
 print(get_recommendations("The Avengers", cosine_sim2))
-
-# In[ ]:
+print()
+print("Recommendations for The Godfather")
+print(get_recommendations("The Godfather", cosine_sim2))
+print()
+print("Recommendations for Inception")
+print(get_recommendations("Inception", cosine_sim2))
+print()
+print("Recommendations for The Matrix")
+print(get_recommendations("The Matrix", cosine_sim2))
+print()
+print("Recommendations for Interstellar")
+print(get_recommendations("Interstellar", cosine_sim2))
+print()
+print("Recommendations for Snowpiercer")
+print(get_recommendations("Snowpiercer", cosine_sim2))
+print()
+print("Recommendations for Return of the Jedi")
+print(get_recommendations("Return of the Jedi", cosine_sim2))
+print()
+print("Recommendations for Django Unchained")
+print(get_recommendations("Django Unchained", cosine_sim2))
+print()
+print("Recommendations for Shrek")
+print(get_recommendations("Shrek", cosine_sim2))
+print()
+print("Recommendations for Pacific Rim")
+print(get_recommendations("Pacific Rim", cosine_sim2))
+print()
+print("Recommendations for Titanic")
+print(get_recommendations("Titanic", cosine_sim2))
+print()
+print("Recommendations for Jurassic Park")
+print(get_recommendations("Jurassic Park", cosine_sim2))
+print()
+print("Recommendations for I, Robot")
+print(get_recommendations("I, Robot", cosine_sim2))
+print()
+print("Recommendations for Legend")
+print(get_recommendations("Legend", cosine_sim2))
+print()
+print("Recommendations for Raiders of the Lost Ark")
+print(get_recommendations("Raiders of the Lost Ark", cosine_sim2))
