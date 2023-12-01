@@ -1,3 +1,5 @@
+#Link to used dataset: https://www.kaggle.com/datasets/joebeachcapital/banana-index
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier, export_graphviz

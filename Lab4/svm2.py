@@ -1,3 +1,5 @@
+#Link to used dataset: https://www.kaggle.com/datasets/joebeachcapital/banana-index
+
 import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.decomposition import PCA
