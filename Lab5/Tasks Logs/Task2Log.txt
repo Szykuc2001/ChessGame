@@ -1,0 +1,25 @@
+C:\Users\Simon\PycharmProjects\ChessGame\venv\Scripts\python.exe C:\Users\Simon\PycharmProjects\ChessGame\Lab5\Task2.py
+
+Epoch 1/10
+1563/1563 [==============================] - 6s 4ms/step - loss: 1.7251 - accuracy: 0.3606 - val_loss: 1.4051 - val_accuracy: 0.4891
+Epoch 2/10
+1563/1563 [==============================] - 5s 3ms/step - loss: 1.4015 - accuracy: 0.4947 - val_loss: 1.2048 - val_accuracy: 0.5665
+Epoch 3/10
+1563/1563 [==============================] - 5s 3ms/step - loss: 1.2702 - accuracy: 0.5505 - val_loss: 1.1193 - val_accuracy: 0.5942
+Epoch 4/10
+1563/1563 [==============================] - 5s 3ms/step - loss: 1.1720 - accuracy: 0.5864 - val_loss: 1.0779 - val_accuracy: 0.6160
+Epoch 5/10
+1563/1563 [==============================] - 5s 3ms/step - loss: 1.0967 - accuracy: 0.6154 - val_loss: 1.0211 - val_accuracy: 0.6382
+Epoch 6/10
+1563/1563 [==============================] - 5s 3ms/step - loss: 1.0440 - accuracy: 0.6338 - val_loss: 0.9645 - val_accuracy: 0.6631
+Epoch 7/10
+1563/1563 [==============================] - 5s 3ms/step - loss: 0.9916 - accuracy: 0.6538 - val_loss: 0.9510 - val_accuracy: 0.6650
+Epoch 8/10
+1563/1563 [==============================] - 5s 3ms/step - loss: 0.9440 - accuracy: 0.6717 - val_loss: 0.9257 - val_accuracy: 0.6831
+Epoch 9/10
+1563/1563 [==============================] - 5s 3ms/step - loss: 0.9080 - accuracy: 0.6838 - val_loss: 0.8754 - val_accuracy: 0.6926
+Epoch 10/10
+1563/1563 [==============================] - 5s 3ms/step - loss: 0.8793 - accuracy: 0.6947 - val_loss: 0.9101 - val_accuracy: 0.6886
+313/313 [==============================] - 0s 1ms/step - loss: 0.9101 - accuracy: 0.6886
+313/313 [==============================] - 0s 1ms/step
+Test accuracy: 0.6886000037193298
