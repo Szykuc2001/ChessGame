@@ -300,3 +300,13 @@ Epoch 150/150
 62/62 [==============================] - 0s 666us/step - loss: 0.3534 - accuracy: 0.8371
 5/5 [==============================] - 0s 1ms/step - loss: 0.6041 - accuracy: 0.7338
 Test Accuracy: 73.38%
+
+DecisionTree Accuracy for the same dataset (from Lab4):
+Test Accuracy: 68.4%
+
+SVM Classifier Accuracy for the same dataset (from Lab4):
+Test Accuracy: 100%
+
+As we can see, the SVM Classified from Lab5 still presents itself with the best results, better than
+Neural Network. However, we can see here that Neural Network achieved better score than DecisionTree
+in classifying the same dataset.
