@@ -1,8 +1,11 @@
 '''
+Link to dataset used in the task: https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.csv
+
 Setup instructions:
 1. Import/Install all the required libraries from Step1 (if they are highlighted with red colour, they should
 still work after they are installed)
-2. Run the program
+2. Download dataset1.csv and put it in the same directory as Task1.py
+3. Run the program
 Szymon Kuczyński s22466
 '''
 

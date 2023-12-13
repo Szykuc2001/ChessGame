@@ -1,4 +1,6 @@
 '''
+Link to dataset used in the task: https://www.cs.toronto.edu/~kriz/cifar.html
+
 Setup instructions:
 1. Import/Install all the required libraries from Step1 (if they are highlighted with red colour, they should
 still work after they are installed)

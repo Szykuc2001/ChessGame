@@ -1,4 +1,6 @@
 '''
+Link to dataset used in task: https://keras.io/api/datasets/imdb/
+
 Setup instructions:
 1. Import/Install all the required libraries from Step1 (if they are highlighted with red colour, they should
 still work after they are installed)
