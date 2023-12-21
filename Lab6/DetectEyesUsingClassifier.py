@@ -7,31 +7,31 @@ Install instructions:
 
 s22466 Szymon Kuczyński
 '''
-from mtcnn import MTCNN
 import cv2
 import time
 
 '''
-Utilizes the MTCNN detector to detect faces within the frame.
-Confidence Check: Verifies if the confidence level of the detected face is higher than 0.9 (90%). Confidence denotes the reliability of the face detection.
-Eye Keypoints Extraction: Retrieves the keypoints for the left and right eyes if the confidence level surpasses the threshold.
-Return:
-If both left and right eye keypoints are detected with high confidence, the function returns a boolean True to indicate eyes detection along with the coordinates of the left and right eyes.
-If the confidence threshold is not met or no eyes are detected, the function returns a boolean False and None values for eye coordinates.
+Convert Frame to Grayscale:
+
+gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY): Converts the input frame (which is typically in BGR color format) to grayscale. Grayscale simplifies image processing as it represents the image in terms of intensity rather than colors.
+Eye Cascade Classifier Initialization:
+
+eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml'): Initializes the Haar Cascade Classifier specifically designed for detecting eyes. The cv2.CascadeClassifier is provided with the path to the pre-trained XML file (haarcascade_eye.xml) containing the necessary information to detect eyes.
+Eye Detection:
+
+eyes = eye_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5): Utilizes the detectMultiScale function of the cascade classifier to identify potential eye regions in the grayscale frame.
+gray: Grayscale frame used as input for eye detection.
+scaleFactor=1.1: Parameter specifying how much the image size is reduced at each image scale. It compensates for the eye size's variation concerning the distance from the camera.
+minNeighbors=5: Parameter specifying how many neighbors each candidate rectangle should have to retain it. Higher values reduce false positives but might miss some eyes.
+Return Statement:
+
+return len(eyes) > 0: Returns True if at least one eye is detected in the frame, otherwise False. It evaluates the number of detected eye regions. If there's at least one region identified as an eye, it returns True; otherwise, it returns False.
 '''
 def detect_eyes(frame):
-    detector = MTCNN()
-    faces = detector.detect_faces(frame)
-
-    for face in faces:
-
-        if face['confidence'] > 0.9:
-            left_eye = face['keypoints']['left_eye']
-            right_eye = face['keypoints']['right_eye']
-
-            return True, left_eye, right_eye
-
-    return False, None, None
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
+    eyes = eye_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+    return len(eyes) > 0
 
 '''
 Camera Initialization:
@@ -117,13 +117,10 @@ def main():
 
     alert_message = "Alert: User not looking at the screen"
 
-
     while True:
         ret, camera_frame = camera.read()
 
-        eyes_detected, left_eye, right_eye = detect_eyes(camera_frame)
-
-        if eyes_detected:
+        if detect_eyes(camera_frame):
             if not is_playing:
                 video.set(cv2.CAP_PROP_POS_FRAMES, paused_frame)
                 is_playing = True
@@ -133,7 +130,6 @@ def main():
                 alert_displayed = False
 
             pause_start_time = 0
-
         else:
             if is_playing:
 
